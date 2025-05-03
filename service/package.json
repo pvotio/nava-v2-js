@@ -1,0 +1,23 @@
+{
+  "name": "pdf-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "worker": "node service/worker.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "express-jwt": "^7.8.0",
+    "jwks-rsa": "^2.1.0",
+    "@azure/identity": "^2.0.0",
+    "@azure/storage-blob": "^12.0.0",
+    "@azure/service-bus": "^7.13.2",
+    "puppeteer": "^20.0.0",
+    "p-limit": "^4.0.0",
+    "helmet": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  }
+}

@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: navav2-worker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: navav2-worker
+  template:
+    metadata:
+      labels:
+        app: navav2-worker
+        azure.workload.identity/use: 'true'
+    spec:
+      serviceAccountName: navav2-sa
+      containers:
+      - name: worker
+        image: <ACR_NAME>.azurecr.io/navav2:latest
+        command:
+        - node
+        - service/worker.js
+        env:
+        - name: SB_NAMESPACE
+          value: nava-pdf-sb
+        - name: SB_QUEUE
+          value: pdf-jobs
+        - name: STORAGE_URL                                 
+          value: https://<your-storage-account>.blob.core.windows.net
+        - name: PUPPETEER_EXECUTABLE_PATH                      
+          value: /usr/bin/chromium-browser
+        - name: WORKER_CONCURRENCY
+          value: '3'
+        - name: PDF_CONTAINER
+          value: generated-pdfs
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+          limits:
+            cpu: '1'
+            memory: 1Gi
+        livenessProbe:
+          exec:
+            command:
+            - pgrep
+            - -f
+            - worker.js
+          initialDelaySeconds: 20
+          periodSeconds: 20
+        readinessProbe:
+          exec:
+            command:
+            - pgrep
+            - -f
+            - worker.js
+          initialDelaySeconds: 10
+          periodSeconds: 20
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL

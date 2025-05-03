@@ -1,0 +1,4 @@
+pandas==2.0.3
+pyodbc==4.0.35
+azure-identity==2.0.0
+azure-storage-blob==12.0.0

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: navav2
+patch: |-
+  spec:
+    template:
+      spec:
+        volumes:
+          # shared writable volume that will hold the repo
+          - name: templates
+            emptyDir: {}
+        # Sidecar container that keeps the repo in sync
+        containers:
+          - name: git-sync
+            image: registry.k8s.io/git-sync/git-sync:v4.1.0
+            env:
+              - name: GIT_SYNC_REPO
+                value: "https://dev.azure.com/<org>/<project>/_git/<repo>"
+              - name: GIT_SYNC_BRANCH
+                value: "main"
+              - name: GIT_SYNC_ROOT
+                value: "/git"
+              - name: GIT_SYNC_DEST
+                value: "templates"      # directory name under /git
+              - name: GIT_SYNC_WAIT      # pull every 120 s
+                value: "120"
+              - name: GIT_SYNC_USERNAME  # PAT in place of username
+                value: ""
+              - name: GIT_SYNC_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: ado-pat
+                    key: pat
+            volumeMounts:
+              - name: templates
+                mountPath: /git
+            securityContext:
+              runAsUser: 65533          # nobody
+              runAsNonRoot: true
+          # --- existing app container ---
+          - name: navav2
+            # (image / env unchanged)
+            volumeMounts:
+              - name: templates
+                mountPath: /opt/app/scripts  # stays identical to today
+        # Remove the original ConfigMap volume
+        volumes:
+          - name: templates
+            emptyDir: {}                # overrides the old ConfigMap volume

@@ -1,0 +1,52 @@
+# azure-pipelines.yml
+# Builds the pdf‑service image and pushes it to Azure Container Registry
+# ---------------------------------------------------------------------
+
+trigger:
+  branches:
+    include:
+      - main   # adjust if you use trunk‑based flow
+
+variables:
+  # Service connection in Azure DevOps pointing at your ACR
+  dockerRegistryServiceConnection: 'pa-azure-container-registry'
+
+  # The ACR repository name you want to push into
+  imageRepository: 'nava-v2-js'
+
+  # Path to your Dockerfile
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+
+  # Semantic timestamp tag + build ID
+  tag: $[format('{0:yyyy}.{0:MM}{0:dd}.{1}', pipeline.startTime, build.buildId)]
+
+stages:
+  - stage: BuildAndPush
+    displayName: Build & Push Docker Image
+    jobs:
+      - job: BuildAndPush
+        displayName: Build & Push pdf-service
+        pool:
+          vmImage: 'ubuntu-latest'
+
+        steps:
+          - task: Docker@2
+            displayName: Build & Push pdf-service image
+            inputs:
+              containerRegistry: $(dockerRegistryServiceConnection)
+              repository: $(imageRepository)
+              command: buildAndPush
+              Dockerfile: $(dockerfilePath)
+              tags: |
+                latest
+                $(tag)
+              buildContext: '$(Build.SourcesDirectory)'
+
+          # (optional) publish image metadata for downstream stages
+          - task: PublishPipelineArtifact@1
+            displayName: Publish image tag
+            inputs:
+              targetPath: $(System.DefaultWorkingDirectory)
+              artifactName: image-metadata
+              publishLocation: pipeline
+

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FF_German</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+      integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin-top: 0mm;
+        margin-bottom: 0mm;
+        margin-left: 0mm;
+        margin-right: 0mm;
+      }
+
+      body {
+        margin: 0mm;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 300;
+        font-size: 13px;
+      }
+
+      html {
+        font-family: 'Roboto', sans-serif;
+        color: #000;i
+        font-size: 13px;
+      }
+      .main-card {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        background-color: beige;
+      }
+      .main-container{
+        margin-top: 0px;
+        padding-top: 0px;
+        padding-left: 20px;
+        background-color: #fff;
+        width: 190mm;
+        height: 100%;
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+      }
+      .head-section {
+        display: flex;
+        justify-content: space-between;
+      }
+      .matador-wrapper{
+        margin-top: 20px;
+        margin-right: 100px;
+        list-style-type: none;
+      }
+      .client-wrapper{
+        list-style-type: none;
+        padding: 0px;
+      
+      }
+      .client-wrapper > li:last-child{
+        margin-top: 30px;
+      }
+      ul > li{
+        padding-bottom: 5px;
+      }
+      .confirmation-wrapper{
+      margin-top: 100px;
+      width: 95%;
+      }
+      table{
+        width: 95%;
+      }
+      
+      td {
+    padding: 7px 0;
+        }
+        
+        tbody tr td:first-child {
+            width: 240px;
+            vertical-align: top; /* moved this here as it's already targeting the first <td> */
+        }
+        
+        .table-wrapper {
+            margin-bottom: 70px;
+        }
+        
+        .footer-wrapper {
+            margin-bottom: 40px;
+        }
+      
+
+      .footer{
+        display: flex;
+        justify-content: flex-end;
+        font-size: 10px;
+        margin-bottom: 70px;
+        width: 95%;
+      }
+      @media print {
+
+        @page {
+          margin-top: 20mm;
+          margin-bottom: 20mm;
+          margin-left: 15mm; /* Left margin */
+          margin-right: 10mm; /* Right margin */
+        }
+
+        .table-dataframe thead th:last-child, .table-dataframe tbody td:last-child{
+          text-align: right !important;
+        }
+
+
+        .pagebreak {
+          page-break-before: always;
+        }
+
+        .no-split {
+          page-break-inside: avoid;
+        }
+
+        .mdl-data-table__cell--numeric {
+          text-align: left;
+          font-size: 8px;
+        }
+
+        .table-card {
+          margin: 0 auto;
+          padding: 0;
+          width: 100%;
+        }
+        
+        .table-wrapper td:first-child {
+    vertical-align: top;
+}
+
+        .table {
+          padding-top: 0 !important;
+        }
+      }
+    </style>               
+  </head>                   
+  <body>      
+    <!-- hidden input field for Team value -->
+<input type="hidden" id="team" value="{{team}}" />
+<input type="hidden" id="mandatorName" value="{{mandatorNamelong}}" />
+<input type="hidden" id="counterpartyCountry" value="{{counterpartyCountry}}" />
+    <main class="main-card">
+      <div class="main-container">
+        <div class="head-section">
+                            
+          <img src="XXXXXXXX" alt="XXXX image" width="245" height="34">
+          <ul class="matador-wrapper">
+            <li><b>{{mandatorAddress1}}</b></li>
+            <li>{{mandatorAddress2}}</li>
+            <li>{{mandatorAddress3}}</li>
+            <li>{{mandatorAddress4}}</li>
+            <li>{{mandatorAddress5}}</li>
+            <li>{{mandatorAddress6}}</li>
+            <li>{{mandatorAddress7}}</li>
+          </ul>             
+        </div>              
+        <div>               
+          <ul class="client-wrapper" >
+            <li>{{clientName}}</li>
+            <li>{{clientAddress1}}</li>
+            <li>{{clientAddress2}}</li>
+            <li>{{clientAddress3}}</li>
+            <li>{{clientAddress4}}</li>
+            <li>{{clientAddress5}}</li>
+            <li>{{invoicedatelongINT}}</li>
+          </ul>
+        </div>
+        <div class="confirmation-wrapper">
+          <h4 data-translate-key="Bestätigung">Bestätigung</h4>
+          <p data-translate-key="confirmationSentence1">Hiermit bestätigen wir Ihnen im Namen und auf Rechnung der Gegenpartei {{counterpartyNamelong}} folgende Überweisung getätigt zu haben:</p>
+        </div>    
+        <div class="table-wrapper">
+          <table>
+              <tr>
+                <td data-translate-key="Betrag"><b>Betrag</b></td>
+                <td>{{tradeCurrency}} {{customerFeeCur_accountingINT}}</td>
+              </tr>
+              <tr>
+                <td><b data-translate-key="Grund">Grund</b></td>
+                <td data-translate-key="finderFeeSentence">Weiterleitung der vereinnahmten Finder Fee aus dem Wertpapier mit der ISIN {{isin}}</td>
+              </tr>
+              <tr>
+                <td><b data-translate-key="Begünstigter">Begünstigter</b></td>
+                <td>{{clientNamelong}}</td>
+              </tr>
+              <tr>
+                <td><b>IBAN</b></td>
+                <td>{{clientIBAN}}</td>
+              </tr>
+              <tr>
+                <td><b>Bank</b></td>
+                <td>{{clientBank}}</td>
+              </tr>
+              <tr>
+                <td><b>SWIFT</b></td>
+                <td>{{clientSWIFT}}</td>
+              </tr>
+              <tr>
+                <td><b data-translate-key="Handelstag">Handelstag
+                <td>{{tradeDateINT}}</td>
+              </tr>
+          </table>
+        </div> 
+        <div class="footer-wrapper">
+          <p id="conditionalSentence" data-translate-key="vatInformation" style="display: none; margin-bottom: 30px;">Bitte beachten Sie, dass der überwiesene Betrag eine Mehrwertsteuer von 7.7% beinhaltet - es ist ihre Pflicht als Dienstleister, die Mehrwertsteuer an die Mehrwertsteuerbehörde zu überweisen.</p>
+          <div class="spacer"></div>
+          <p id="friendlyGreeting" data-translate-key="Freundliche Grüsse">Freundliche Grüsse</p>
+          <p>XXXXX Team</p>
+        </div>   
+        <div class="footer">
+          <p><span>{{productnumber}}</span> / <span>{{tradenumber}}</span></p>
+        </div>
+      </div>
+    </main>
+    
+    
+      <!-- JavaScript code goes here -->
+  <script>
+    const translations = {
+      'DE': {
+        'Bestätigung': 'Bestätigung',
+        'Betrag': 'Betrag',
+        'Grund': 'Grund',
+        'Handelstag': 'Handelstag',
+        'Freundliche Grüsse': 'Freundliche Grüsse',
+        'confirmationSentence1': 'Hiermit bestätigen wir Ihnen im Namen und auf Rechnung der Gegenpartei {{counterpartyNamelong}} folgende Überweisung getätigt zu haben:',
+        'finderFeeSentence': 'Weiterleitung der vereinnahmten Finder Fee aus dem Wertpapier mit der',
+        'vatInformation': 'Bitte beachten Sie, dass der überwiesene Betrag eine Mehrwertsteuer von 8.1% beinhaltet - es ist ihre Pflicht als Dienstleister, die Mehrwertsteuer an die Mehrwertsteuerbehörde zu überweisen.',
+        // ... other translations ...
+      },
+      'EN': {
+        'Bestätigung': 'Confirmation',
+        'Betrag': 'Amount',
+        'Grund': 'Reason',
+        'Begünstigter': 'Beneficiary',
+        'Handelstag': 'Trade date',
+        'Freundliche Grüsse': 'Kind Regards',
+        'confirmationSentence1': 'We hereby confirm having transferred by order and for account of the counterparty {{counterpartyNamelong}} the following transfer:',
+        'finderFeeSentence': 'Forwarding of the collected Finder Fee relating to the security with',
+        'vatInformation': 'Please note that the transferred amount includes a value-added tax (VAT) of 8.1% - it is your responsibility as a service provider to remit this VAT to the appropriate tax authority.',
+        // ... other translations ...
+      }
+    };
+
+    document.addEventListener("DOMContentLoaded", function() {
+            const teamValue = document.getElementById("team").value; 
+            let language = 'DE';  // default to German
+            
+            if (teamValue === "MEA") {
+                language = 'EN';  // switch to English for MEA team
+            }
+        
+            setLanguage(language);
+            setConditionalSentence();
+            adjustMargin();
+            
+            // Also adjust the margin whenever the window is resized
+            window.addEventListener("resize", adjustMargin);
+        });
+
+    function adjustMargin() {
+        // Assume an A4 height of 960px after accounting for margins
+        const A4_HEIGHT = 840;
+    
+        // Calculate the height of the entire content up to the spacer
+        let contentHeightUpToSpacer = document.querySelector(".spacer").getBoundingClientRect().top;
+    
+        // Calculate the remaining space from the content up to the spacer to the end of the A4 page
+        let remainingSpace = A4_HEIGHT - contentHeightUpToSpacer;
+    
+        // Ensure the remainingSpace isn't negative
+        if (remainingSpace < 0) remainingSpace = 0;
+    
+        // Adjust the height of the spacer div
+        document.querySelector(".spacer").style.height = remainingSpace + "px";
+    }
+
+
+    
+    
+    
+    function setConditionalSentence() {
+        const mandatorName = document.getElementById("mandatorName").value;
+        const counterpartyCountry = document.getElementById("counterpartyCountry").value;
+        const conditionalElement = document.getElementById("conditionalSentence");
+        
+        if (mandatorName === "XXXX" && counterpartyCountry === "Switzerland") {
+            conditionalElement.style.display = "block";  // show the sentence
+        } else {
+            conditionalElement.style.display = "none";  // hide the sentence
+        }
+    
+        adjustMargin();  // Adjust the margin after showing/hiding the conditional element
+    }
+    
+
+ function setLanguage(language) {
+    const elementsToTranslate = document.querySelectorAll("[data-translate-key]");
+
+    elementsToTranslate.forEach(element => {
+        const translationKey = element.getAttribute('data-translate-key');
+        
+        if (translations[language] && translations[language][translationKey]) {
+            let translatedText = translations[language][translationKey];
+    
+            // Special case for the "confirmationSentence1" key
+            if (translationKey === "confirmationSentence1") {
+                const placeholderValue = element.getAttribute('data-placeholder-value') || '';
+                translatedText = translatedText.replace('{{pa_counterpartynamelong}}', placeholderValue);
+            }
+    
+            // Special case for the "finderFeeSentence" key
+            if (translationKey === "finderFeeSentence") {
+                translatedText += " ISIN {{isin}}";  // Add " ISIN {{isin}}" to the end of the translated sentence
+            }
+
+            element.textContent = translatedText;
+        }
+    });
+}
+  </script>
+
+
+  </body>
+</html>

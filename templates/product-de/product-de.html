@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin-top: 0mm;
+            margin-bottom: 0mm;
+            margin-left: 0mm;
+            margin-right: 0mm;
+        }
+
+        body {
+            margin: 0mm;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 300;
+        }
+
+        .container {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0px;
+        }
+        
+        .container-1 {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0px;
+        }
+
+        .container-full-width {
+            width: 100%;
+            background-color: lightblue;
+            padding: 10px 20px 0px 20px;
+            box-sizing: border-box;
+        }
+
+        .container-full-width-centered {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            background-color: red;
+            padding: 0px 20px 0px 20px;
+            box-sizing: border-box;
+        }
+        
+
+        .container-equal-width {
+            width: 50%;
+            background-color: lightgreen;
+            padding: 10px 20px 0px 20px;
+            box-sizing: border-box;
+        }
+
+        .container-unequal-width {
+            width: 100%;
+            background-color: lightyellow;
+            padding: 10px 20px 0px 20px;
+            box-sizing: border-box;
+            /* border-right: 1px solid lightgray; */
+        }
+
+        .container-unequal-width-2 {
+            width: 70%;
+            background-color: lightyellow;
+            padding: 10px 20px 0px 20px;
+            box-sizing: border-box;
+            /* border-right: 1px solid lightgray; */
+        }
+
+        .container-unequal-width-text {
+            font-size: 1.8em;
+            padding: 0px;
+        }
+
+
+        .section-header-text {
+            color: #13294B;
+            font-size: 0.9em;
+            padding: 0px;
+        }
+
+        .table-card {
+            width: 100%;
+        }
+
+        thead {
+            border-top: none;
+        }
+
+        th {
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .table-dataframe thead th:last-child,
+        .table-dataframe tbody td:last-child {
+            text-align: right;
+        }
+
+        .product-details-table {
+            color: #747476;
+            font-size: 0.6em;
+        }
+
+        tr {
+            border-bottom: 1px #e7e4e4 solid;
+            border-top: 1px #e7e4e4 solid;
+        }
+
+        table,
+        th,
+        td {
+            border-left: none;
+            border-right: none;
+            vertical-align: top;
+        }
+
+        .table-dataframe {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            white-space: normal
+        }
+
+        .pagebreak::after {
+            content: "";
+            display: block;
+            height: 0mm;
+        }
+
+        .disclaimer-p {
+            color: #747476;
+            font-size: 0.55em;
+            align-items: center;
+            text-align: justify;
+            justify-content: center;
+        }
+
+        .product-details {
+            width: 100%;
+        }
+
+        .product-title {
+            color: #13294B;
+            font-size: 0.75em;
+        }
+
+        .product-name {
+            color: #747476;
+            font-size: 0.5em;
+        }
+
+        .product-isin {
+            color: #747476;
+            font-size: 0.4em;
+        }
+
+        @media print {
+
+            @page {
+                margin-top: 20mm;
+                margin-bottom: 20mm;
+                margin-left: 10mm;
+                /* Left margin */
+                margin-right: 10mm;
+                /* Right margin */
+            }
+
+            .table-dataframe thead th:last-child,
+            .table-dataframe tbody td:last-child {
+                text-align: right !important;
+            }
+
+
+            .pagebreak {
+                page-break-before: always;
+            }
+
+            .no-split {
+                page-break-inside: avoid;
+            }
+
+            .mdl-data-table__cell--numeric {
+                text-align: left;
+                font-size: 8px;
+            }
+
+            .table-card {
+                margin: 0 auto;
+                padding: 0;
+                width: 100%;
+            }
+
+            .table {
+                padding-top: 0 !important;
+            }
+            
+             tr:nth-child(-n+3) {
+                page-break-inside: avoid;
+            }
+            
+            thead {
+                display: table-header-group; /* Ensure the thead is repeated on each new page */
+            }
+            
+            tfoot {
+                display: table-footer-group; /* Ensure the tfoot (if you have one) is repeated */
+            }
+            
+            .section-header-text {
+                /* If you want to avoid breaking after the header, do not force a page break before it */
+                page-break-after: avoid; /* Avoid breaking immediately after the header */
+            }
+            
+              /* This is to ensure that the header is not separated from the table-card */
+              .section-header-text + .table-card {
+                page-break-before: avoid; /* Ensure the header and the start of the table-card stay together */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="first-page-content">
+    <div class="container" style="margin-bottom: 10px;">
+        <div class="container-unequal-width">
+            <div class="container-unequal-width-text">
+                <div class="product-details">
+                    <div class="product-title">
+                        <p><strong>{{titleDe}}</strong></p>
+                    </div>
+                    <div class="product-isin">
+                        <p style="margin-bottom: 10px;">
+                            <small>
+                                <strong>ISIN:</strong> {{isin}}&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <strong>WKN:</strong> {{wkn}}&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <strong>PA Nr:</strong> {{paNr}}&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <strong>Emittent:</strong> {{issuerName}}&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <strong>Produkttyp:</strong> {{svspGroupDe}}
+                            </small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<div class="container" style="margin-bottom: 10px;">
+    <div class="container-unequal-width">
+                <div class="container-unequal-width-text">
+                    <div class="product-details">
+                        <div class="product-isin">
+                        <p style="margin-bottom: 10px;"><strong> Produkt per</strong> {{product_date}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+
+
+
+    <div class="container">
+        <div class="container-full-width">
+            <div class="section-header-text">
+                <p><strong>Disclaimer</strong></p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container" style="margin-bottom: 20px;">
+        <div class="container-full-width center">
+            <div class="disclaimer-p">
+                <p style="margin-bottom: 10px;">
+                    XXXXX.
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="container">
+        <div class="container-equal-width">
+            <div class="section-header-text">
+                <p><strong>Produkt Details</strong></p>
+            </div>
+        </div>
+        <div class="container-equal-width">
+            <div class="section-header-text">
+                <p><strong></strong></p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container" style="margin-bottom: 20px;">
+        <div class="container-equal-width">
+            <div class="table-card">
+                <div class="table-content">
+                    <table class="product-details-table">
+                        <tbody>
+                            {% if initialFixingDateDE %}
+                            <tr>
+                                <td><strong>Anfangsfixierung</strong></td>
+                                <td>{{initialFixingDateDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if paymentDateDE %}
+                            <tr>
+                                <td><strong>Zahlungstag</strong></td>
+                                <td>{{paymentDateDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if finalFixingDateDE %}
+                            <tr>
+                                <td><strong>Schlussfixierung</strong></td>
+                                <td>{{finalFixingDateDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if redeemedondateDE %}
+                            <tr>
+                                <td><strong>Effektive Rückzahlung</strong></td>
+                                <td>{{ redeemedondateDE }}</td>
+                            </tr>
+                            {% elif redemptionDateDE %}
+                            <tr>
+                                <td><strong>Rückzahlungsdatum</strong></td>
+                                <td>{{ redemptionDateDE }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if CouponobservationTypesDE %}
+                            <tr>
+                                <td><strong>Kupontyp</strong></td>
+                                <td>{{CouponobservationTypesDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if couponTextDE %}
+                            <tr>
+                                <td><strong>Kupon</strong></td>
+                                <td>{{couponTextDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if maxCouponDE %}
+                            <tr>
+                                <td><strong>Max Kupon</strong></td>
+                                <td>{{maxCouponDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if minCouponDE %}
+                            <tr>
+                                <td><strong>Min Kupon</strong></td>
+                                <td>{{minCouponDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if isMemoryCouponDE %}
+                            <tr>
+                                <td><strong>Memory Kupon</strong></td>
+                                <td>{{isMemoryCouponDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if CouponPaymentsNumber %}
+                            <tr>
+                                <td><strong>Anzahl der Kupons</strong></td>
+                                <td>{{CouponPaymentsNumber}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if redemptionpriceDE %}
+                            <tr>
+                                <td><strong>Rückzahlungspreis</strong></td>
+                                <td>{{ redemptionpriceDE }}</td>
+                            </tr>
+                            {% elif latestBidDE %}
+                            <tr>
+                                <td><strong>Kurs Datum</strong></td>
+                                <td>{{ latestPriceDateDE }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Letzter Geldkurs</strong></td>
+                                <td>{{ latestBidDE }}</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="container-equal-width">
+            <div class="table-card">
+                <div class="table-content">
+                    <table class="product-details-table">
+                        <tbody>
+                            {% if CurrencyDE %}
+                            <tr>
+                                <td><strong>Währung</strong></td>
+                                <td>{{CurrencyDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if nominalDE %}
+                            <tr>
+                                <td><strong>Nominalbetrag</strong></td>
+                                <td>{{nominalDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if issuePriceDE %}
+                            <tr>
+                                <td><strong>Emissionspreis</strong></td>
+                                <td>{{issuePriceDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if isQuantoDE %}
+                            <tr>
+                                <td><strong>Quanto</strong></td>
+                                <td>{{isQuantoDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if issuerName %}
+                            <tr>
+                                <td><strong>Emittent</strong></td>
+                                <td>{{issuerName}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if guarantorName %}
+                            <tr>
+                                <td><strong>Garantiegeber</strong></td>
+                                <td>{{guarantorName}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if observationTypesDE %}
+                            <tr>
+                                <td><strong>Beobachtungstypen</strong></td>
+                                <td>{{observationTypesDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if dropback_distributionDE %}
+                            <tr>
+                                <td><strong>Aktuelle Anteile</strong></td>
+                                <td>{{dropback_distributionDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if autocalltextDE %}
+                            <tr>
+                                <td><strong>Express Levels</strong></td>
+                                <td>{{autocalltextDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if autocallCountDE %}
+                            <tr>
+                                <td><strong>Anzahl der Express Beobachtungen</strong></td>
+                                <td>{{autocallCountDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if autocalldatenextDE %}
+                            <tr>
+                                <td><strong>Nächste Express Beobachtung</strong></td>
+                                <td>{{autocalldatenextDE}}</td>
+                            </tr>
+                            {% endif %}       
+                            {% if capDE %}
+                            <tr>
+                                <td><strong>Cap</strong></td>
+                                <td>{{capDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if bonusLevelDE %}
+                            <tr>
+                                <td><strong>Bonus Level</strong></td>
+                                <td>{{bonusLevelDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if participationMinDE %}
+                            <tr>
+                                <td><strong>Partizipation Min</strong></td>
+                                <td>{{participationMinDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if participationMaxDE %}
+                            <tr>
+                                <td><strong>Partizipation Max</strong></td>
+                                <td>{{participationMaxDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if capitalProtectionDE %}
+                            <tr>
+                                <td><strong>Kapitalschutz</strong></td>
+                                <td>{{capitalProtectionDE}}</td>
+                            </tr>
+                            {% endif %}
+                            {% if settlementTypeDe %}
+                            <tr>
+                                <td><strong>Rückzahlung</strong></td>
+                                <td>{{settlementTypeDe}}</td>
+                            </tr>
+                            {% endif %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+          document.addEventListener("DOMContentLoaded", function() {
+            adjustMargin();
+        });
+        
+        window.addEventListener("resize", adjustMargin);
+        
+        function adjustMargin() {
+            // Assume an A4 height of 960px after accounting for margins
+            const A4_HEIGHT = 605;
+        
+            // Get the height of the first page content only
+            let firstPageContent = document.querySelector('.first-page-content'); // Make sure this selector targets your first-page content
+            let contentHeight = firstPageContent.offsetHeight;
+
+            // Calculate the desired top margin
+            let topMargin = A4_HEIGHT - contentHeight;
+        
+            console.log('Calculated Top Margin: ' + topMargin);
+        
+            // Make sure the top margin isn't negative
+            if (topMargin < 0) {
+                console.log('Top margin was negative, setting to 0');
+                topMargin = 0;
+            }
+        
+            // Set the top margin to the container
+            let container = document.querySelector(".container-1"); // Make sure this selector targets the right container
+            container.style.marginTop = topMargin + "px";
+
+        
+            console.log('Margin set to: ' + container.style.marginTop);
+        }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+    <div class="container-1">
+        <div class="container-full-width">
+            <div class="section-header-text">
+                <p><strong>Produkt Historie</strong></p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="container">
+        <div class="container-full-width-centered">
+            {{product_chart}}
+        </div>
+    </div>
+
+
+
+
+
+    
+    
+    
+    
+    
+{% if table1 %}
+    <div class="container">
+        <div class="container-full-width">
+            <div class="section-header-text">
+                <p><strong>Basiswerte</strong></p>
+            </div>
+            <div class="table-card">
+                <div class="table-content">
+                    {{table1}}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+
+
+{% if table6 %}
+    <div class="container">
+        <div class="container-full-width">
+            <div class="section-header-text">
+                <p><strong>Nachkauf Investitionen</strong></p>
+            </div>
+            <div class="table-card">
+                <div class="table-content">
+                    {{table6}}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+
+
+
+{% if basiswert_chart %}
+    <div class="container">
+        <div class="container-full-width">
+            <div class="section-header-text">
+                <p><strong>Basiswerte Historie</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="container-full-width-centered">
+            {{basiswert_chart}}
+        </div>
+    </div>
+{% endif %}
+
+
+
+{% if table2 or table2b %}
+<div class="container">
+  {% if table2b %}
+    <div class="container-full-width">
+        <div class="section-header-text">
+            <p><strong>Kuponzahlungen</strong></p>
+        </div>
+    </div>
+  {% endif %}
+</div>
+{% endif %}
+
+
+{% if table2 or table2b %}
+<div class="container">
+  {% if table2b %}
+    <div class="container-full-width">
+        {{table2b}}
+    </div>
+  {% endif %}
+</div>
+{% endif %}
+
+
+
+{% if table3 %}
+    <div class="container">
+        <div class="container-full-width">
+            <div class="section-header-text">
+                <p><strong>Kupon Beobachtungen</strong></p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="container">
+        <div class="container-full-width">
+            <div class="table-card">
+                <div class="table-content">
+                    {{table3}}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+
+
+{% if table4b %}
+<div class="container">
+  {% if table4b %}
+    <div class="container-full-width">
+        <div class="section-header-text">
+            <p><strong>Kündigungsrecht des Emittenten </strong></p>
+        </div>
+    </div>
+  {% endif %}
+</div>
+{% endif %}
+
+
+{% if table4b %}
+<div class="container">
+  {% if table4b %}
+    <div class="container-full-width">
+        {{table4b}}
+    </div>
+  {% endif %}
+</div>
+{% endif %}
+
+
+
+
+{% if table4 %}
+    <div class="container">
+        <div class="container-full-width">
+            <div class="section-header-text">
+                <p><strong>Express Beobachtungen</strong></p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="container">
+        <div class="container-full-width">
+            <div class="table-card">
+                <div class="table-content">
+                    {{table4}}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+
+
+{% if table5 %}
+    <div class="container">
+        <div class="container-full-width">
+            <div class="section-header-text">
+                <p><strong>Barriere Beobachtungen</strong></p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="container">
+        <div class="container-full-width">
+            <div class="table-card">
+                <div class="table-content">
+                    {{table5}}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+
+
+
+
+
+</body>
+
+</html>

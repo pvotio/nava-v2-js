@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - deployment.yaml
+  - worker-deployment.yaml
+  - service.yaml
+  - ingress.yaml
+  - service-account.yaml
+
+patchesStrategicMerge:
+  - gitsync-patch.yaml
+
+secretGenerator:
+  - name: ado-pat
+    literals:
+      - pat=<YOUR-40-CHAR-PAT>
+  - name: ticket-secret                                
+    literals:
+      - TICKET_SECRET=<BASE64_RANDOM_STRING>
+
+generatorOptions:
+  disableNameSuffixHash: true

@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: navav2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: navav2
+  template:
+    metadata:
+      labels:
+        app: navav2
+        azure.workload.identity/use: 'true'
+    spec:
+      serviceAccountName: navav2-sa
+      volumes:
+      - name: templates
+        configMap:
+          name: pdf-templates
+      containers:
+      - name: navav2
+        image: <ACR_NAME>.azurecr.io/navav2:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: SQL_SERVER
+          value: <your-sql-server>.database.windows.net
+        - name: SQL_DB
+          value: <your-db>
+        - name: AZURE_TENANT_ID
+          value: <your-tenant-id>
+        - name: AZURE_AD_AUDIENCE
+          value: api://navav2
+        - name: AUTH0_DOMAIN
+          value: <your-auth0-domain>.auth0.com
+        - name: AUTH0_API_AUDIENCE
+          value: https://pdf.example.com
+        - name: SCRIPTS_DIR
+          value: /opt/app/scripts
+        - name: SB_NAMESPACE
+          value: nava-pdf-sb
+        - name: SB_QUEUE
+          value: pdf-jobs
+        - name: PUPPETEER_EXECUTABLE_PATH
+          value: /usr/bin/chromium-browser
+        - name: STORAGE_URL
+          value: https://<your-storage-account>.blob.core.windows.net
+        - name: PAYLOAD_CONTAINER
+          value: pdfpayloads
+        - name: PDF_CONTAINER
+          value: generated-pdfs
+        - name: TICKET_SECRET                                       
+          valueFrom:
+            secretKeyRef:
+              name: ticket-secret
+              key: TICKET_SECRET
+        volumeMounts:
+        - name: templates
+          mountPath: /opt/app/scripts
+        resources:
+          requests:
+            cpu: 250m
+            memory: 256Mi
+          limits:
+            cpu: '1'
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
